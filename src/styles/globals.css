@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  main {
+    @apply flex flex-col items-center gap-6 p-6;
+  }
+  label {
+    @apply font-medium;
+  }
+  input {
+    @apply px-4 py-2 bg-gray-100 rounded;
+  }
+  button {
+    @apply px-4 py-2 font-medium text-white transition-colors bg-indigo-600 rounded hover:bg-indigo-700;
+  }
+  table {
+    @apply flex flex-col overflow-hidden rounded;
+  }
+  tr {
+    @apply flex;
+  }
+  th {
+    @apply flex-1 px-4 py-2 font-medium text-white bg-indigo-600;
+  }
+  td {
+    @apply flex-1 px-4 py-2 bg-gray-100;
+  }
+}
