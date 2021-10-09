@@ -937,8 +937,7 @@ __metadata:
   checksum: ac349d0b5341ad0859052d843717a1f596adf2efaa85ed9796581aa2f8fea74fda0f68b300363da8a0fb50f4b41b381c4f0b53dd14052205b9a082be0ca388b7
   languageName: node
   linkType: hard
-
-"axios@npm:^0.22.0":
+"axios@npm:latest":
   version: 0.22.0
   resolution: "axios@npm:0.22.0"
   dependencies:
