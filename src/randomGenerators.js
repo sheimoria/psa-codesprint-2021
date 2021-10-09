@@ -16,6 +16,7 @@ export const generateWorkers = (count) => {
         worker.department_Id = generateDepartmentId()
         worker.skill_Id = generateSkillId()
         worker.name = `Worker${x}`
+        worker.deleteKey = "key"
         arrayOfWorkers.push(worker)
     }
     return arrayOfWorkers

@@ -1,5 +1,7 @@
 import * as deleteRequests from '../apis/deleteRequests'
+import * as randomGenerators from '../randomGenerators'
 import * as postRequests from '../apis/postRequests'
+
 
 import Head from 'next/head'
 
@@ -88,7 +90,8 @@ export default Home
 
 const postWorkers = async () => {
   // await postRequests.generateWorkersAPI(30)
-  await postRequests.generateTasksAPI()
+  await deleteRequests.deleteAllWorkers()
+  // await postRequests.generateTasksAPI()
   // await postRequests.addWorkerTaskPair(1, 3)
   // await deleteRequests.deleteAllWorkerTaskPairs(1)
 }
