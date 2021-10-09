@@ -1,58 +1,32 @@
-import { google } from 'googleapis'
+import axios from 'axios'
+import useSWR from 'swr'
 
-export const getTasks = async (size: number): Promise<string[][]> => {
-  const auth = await google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  })
-
-  const sheets = google.sheets({ version: 'v4', auth })
-
-  const range = `Tasks!A$1:H$${size}`
-
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range
-  })
-
-  const data = response.data.values
-
-  return data
+export const useGetTasks = () => {
+  return useSWR(
+    'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Tasks',
+    async (url) => {
+      const response = await axios.get(url)
+      return response.data
+    }
+  )
 }
 
-export const getWorkers = async (size: number): Promise<string[][]> => {
-  const auth = await google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  })
-
-  const sheets = google.sheets({ version: 'v4', auth })
-
-  const range = `Workers!A$1:D$${size}`
-
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range
-  })
-
-  const data = response.data.values
-
-  return data
+export const useGetWorkers = () => {
+  return useSWR(
+    'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Workers',
+    async (url) => {
+      const response = await axios.get(url)
+      return response.data
+    }
+  )
 }
 
-export const getWorkerTasks = async (size: number): Promise<string[][]> => {
-  const auth = await google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  })
-
-  const sheets = google.sheets({ version: 'v4', auth })
-
-  const range = `Worker-Task!A$1:B$${size}`
-
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range
-  })
-
-  const data = response.data.values
-
-  return data
+export const useGetWorkerTasks = () => {
+  return useSWR(
+    'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Worker-Task',
+    async (url) => {
+      const response = await axios.get(url)
+      return response.data
+    }
+  )
 }
