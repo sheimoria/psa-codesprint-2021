@@ -3,7 +3,7 @@ import * as postRequests from '../apis/postRequests'
 import * as deleteRequests from '../apis/deleteRequests'
 
 
-const Home = ({ data }: { data: string[][] }) => {
+const Home = () => {
   return (
     <>
       <Head>
@@ -22,11 +22,13 @@ const Home = ({ data }: { data: string[][] }) => {
           </div>
         </section>
       </div>
+      <div></div>
     </>
   )
 }
 
 export default Home
+
 
 
 const postWorkers = async () => {
@@ -35,3 +37,4 @@ const postWorkers = async () => {
   // await postRequests.addWorkerTaskPair(1, 3)
   // await deleteRequests.deleteAllWorkerTaskPairs(1)
 }
+

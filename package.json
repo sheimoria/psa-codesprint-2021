@@ -15,11 +15,11 @@
     "@tailwindcss/aspect-ratio": "latest",
     "@tailwindcss/forms": "latest",
     "@tailwindcss/typography": "latest",
-    "axios": "^0.22.0",
-    "googleapis": "latest",
+    "axios": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "swr": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
