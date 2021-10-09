@@ -1,5 +1,7 @@
 import Head from 'next/head'
-import { google } from 'googleapis'
+import * as postRequests from '../apis/postRequests'
+import * as deleteRequests from '../apis/deleteRequests'
+
 
 const Home = ({ data }: { data: string[][] }) => {
   return (
@@ -8,9 +10,17 @@ const Home = ({ data }: { data: string[][] }) => {
         <title>PSA Hack</title>
       </Head>
       <div>
-        {data.map((entry, index) => (
-          <h1 key={index}>{entry[0]}</h1>
-        ))}
+        <section className="adminRequirements">
+          <div className="adminForm">
+            <div className="inputField">
+              <h1 className="workerText">Enter Number of Workers: </h1>
+              <input type="text" className="workerText" style={ {border: "black 1px solid"}}/>
+            </div>
+            <div className="workerButton">
+              <button onClick={postWorkers} >Assign To Departments</button>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   )
@@ -18,25 +28,10 @@ const Home = ({ data }: { data: string[][] }) => {
 
 export default Home
 
-export async function getServerSideProps({ query }) {
-  const auth = await google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  })
 
-  const sheets = google.sheets({ version: 'v4', auth })
-
-  const range = `Sheet1!A$1:C$10`
-
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range
-  })
-
-  const data = response.data.values
-
-  return {
-    props: {
-      data
-    }
-  }
+const postWorkers = async () => {
+  // await postRequests.generateWorkersAPI(30)
+  await postRequests.generateTasksAPI()
+  // await postRequests.addWorkerTaskPair(1, 3)
+  // await deleteRequests.deleteAllWorkerTaskPairs(1)
 }
