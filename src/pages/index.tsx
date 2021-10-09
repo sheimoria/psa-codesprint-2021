@@ -8,8 +8,12 @@ const Home = ({ data }: { data: string[][] }) => {
         <title>PSA Hack</title>
       </Head>
       <div>
-        {data.map((entry, index) => (
-          <h1 key={index}>{entry[0]}</h1>
+        {data.map((entries, index) => (
+          <h1 key={index}>
+            {entries.map((entry, index) => (
+              <span key={index}>{entry}</span>
+            ))}
+          </h1>
         ))}
       </div>
     </>
