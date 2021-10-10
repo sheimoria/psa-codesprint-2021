@@ -1,26 +1,89 @@
 import * as deleteRequests from '../apis/deleteRequests'
+import * as getRequests from '../apis/getRequests'
 import * as postRequests from '../apis/postRequests'
 
 import { interAssign, intraAssign } from '../utils/assignUtils'
+import { useEffect, useState } from 'react'
 
 import Head from 'next/head'
-import { useState } from 'react'
 
 const Home = () => {
+  const departments = ['A', 'B', 'C']
   const postWorkers = async () => {
     await deleteRequests.deleteAllWorkers()
     await postRequests.generateWorkersAPI(workerValue)
     await postRequests.generateTasksAPI()
     await deleteRequests.deleteAllWorkerTaskPairs(workerValue)
   }
-
   const [workerValue, setWorkerValue] = useState<any>()
+  const [workers, setWorkers] = useState([])
+  const [equipment, setEquipment] = useState([])
+  const [tasks, setTasks] = useState([])
+  const [workerTasks, setWorkerTasks] = useState([])
+
+  useEffect(() => {
+    const workers = async () => {
+      const response = await getRequests.getWorkers()
+      setWorkers(response)
+    }
+    const equipment = async () => {
+      const response = await getRequests.getEquipment()
+      setEquipment(response)
+    }
+    const workerTasks = async () => {
+      const response = await getRequests.getWorkerTasks()
+      setWorkerTasks(response)
+    }
+    const tasks = async () => {
+      const response = await getRequests.getTasks()
+      setTasks(response)
+    }
+    workers()
+    equipment()
+    workerTasks()
+    tasks()
+  }, [])
+
+  const departmentTasks = (department_Id: string) => {
+    const table = []
+    tasks
+      .filter((task) => task.department_Id === department_Id)
+      .forEach((task) => {
+        const object = {}
+        const selectedEquipment = equipment.filter(
+          (equipment) => equipment.equipment_Id == task.equipment_Id
+        )
+        const selectedWorkerTasks = workerTasks.filter(
+          (workerTask) => workerTask.task_Id == task.task_Id
+        )
+        const selectedWorkers = workers
+          .filter((worker) =>
+            selectedWorkerTasks.some(
+              (selectedWorkerTask) =>
+                selectedWorkerTask.worker_Id === worker.worker_Id
+            )
+          )
+          .map((worker) => worker.name)
+        const selectedManpowerRequired = `${task.currentManpower}/${task.manpowerRequired}`
+        const backLog = `${task.isBackLog}`
+        object['equipment'] = selectedEquipment
+        object['workers'] = selectedWorkers
+        object['manpower'] = selectedManpowerRequired
+        object['backlog'] = backLog
+        table.push(object)
+      })
+    return table
+  }
+
   return (
     <>
       <Head>
         <title>PSA Worker Allocation System</title>
       </Head>
       <main>
+        <h1 className="text-lg font-medium text-indigo-600">
+          PSA Manpower Allocation System
+        </h1>
         <div className="flex flex-col gap-2">
           <label htmlFor="numOfUnassignedWorkers">
             Number of unassigned workers
@@ -36,65 +99,35 @@ const Home = () => {
             <button onClick={interAssign}>Inter Assign Workers</button>
           </div>
         </div>
-        <section className="flex gap-6">
-          <div className="flex flex-col items-center gap-6">
-            <table>
-              <tr>
-                <th>Equipment</th>
-                <th>Workers</th>
-                <th>Required</th>
-                <th>Backlog</th>
-              </tr>
-              <tr>
-                <td>Prime Mover</td>
-                <td>Maria Anders</td>
-                <td>3/4</td>
-                <td className="text-green-600">True</td>
-              </tr>
-            </table>
-            <div className="px-4 py-2 text-indigo-600 bg-indigo-100 rounded">
-              Backlog: %
+        <section className="flex flex-col gap-6">
+          {departments.map((department) => (
+            <div key={department} className="flex flex-col items-start gap-6">
+              <h1>Department {department}</h1>
+              <table>
+                <tr>
+                  <th>Equipment</th>
+                  <th>Workers</th>
+                  <th>Required</th>
+                  <th>Backlog</th>
+                </tr>
+                {departmentTasks(department).map((departmentTask) => (
+                  <tr key={department}>
+                    <td>{departmentTask.equipment[0]?.type}</td>
+                    <td>
+                      {departmentTask.workers.map((worker, index) => (
+                        <p key={index}>{worker}</p>
+                      ))}
+                    </td>
+                    <td>{departmentTask.manpower}</td>
+                    <td>{departmentTask.backlog}</td>
+                  </tr>
+                ))}
+              </table>
+              <div className="px-4 py-2 font-medium text-indigo-600 bg-indigo-100 rounded">
+                Backlog: %
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col items-center gap-6">
-            <table>
-              <tr>
-                <th>Equipment</th>
-                <th>Workers</th>
-                <th>Required</th>
-                <th>Backlog</th>
-              </tr>
-              <tr>
-                <td>Prime Mover</td>
-                <td>Maria Anders</td>
-                <td>3/4</td>
-                <td>True</td>
-              </tr>
-            </table>
-            <div className="px-4 py-2 text-indigo-600 bg-indigo-100 rounded">
-              Backlog: %
-            </div>
-          </div>
-          <div className="flex flex-col items-center gap-6">
-            <table>
-              <tr>
-                <th>Equipment</th>
-                <th>Workers</th>
-                <th>Required</th>
-                <th>Backlog</th>
-              </tr>
-              <tr>
-                <td>Prime Mover</td>
-                <td>Maria Anders</td>
-                <td>3/4</td>
-                <td>True</td>
-              </tr>
-            </table>
-            <div className="px-4 py-2 font-medium text-indigo-600 bg-indigo-100 rounded">
-              Backlog: %
-            </div>
-          </div>
+          ))}
         </section>
       </main>
     </>

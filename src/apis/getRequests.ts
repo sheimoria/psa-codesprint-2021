@@ -29,3 +29,10 @@ export const getTask = async (task_Id: number) => {
   )
   return response.data
 }
+
+export const getEquipment = async () => {
+  const response = await axios.get<Object[]>(
+    'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Equipment'
+  )
+  return response.data
+}
