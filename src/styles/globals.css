@@ -4,27 +4,27 @@
 
 @layer base {
   main {
-    @apply flex flex-col items-center gap-6 p-6;
+    @apply flex flex-col gap-6 p-6 bg-gradient-to-t from-gray-100 to-gray-200;
   }
   label {
     @apply font-medium;
   }
   input {
-    @apply px-4 py-2 bg-gray-100 rounded;
+    @apply px-4 py-2 bg-gray-100 rounded shadow;
   }
   button {
-    @apply px-4 py-2 font-medium text-white transition-colors bg-indigo-600 rounded hover:bg-indigo-700;
+    @apply px-4 py-2 font-medium text-white transition-colors bg-indigo-600 rounded shadow hover:bg-indigo-700;
   }
   table {
-    @apply flex flex-col overflow-hidden rounded;
+    @apply flex flex-col w-full overflow-hidden rounded shadow;
   }
   tr {
-    @apply flex;
+    @apply flex border-b;
   }
   th {
-    @apply flex-1 px-4 py-2 font-medium text-white bg-indigo-600;
+    @apply flex-1 px-4 py-2 font-medium text-left text-white bg-indigo-600;
   }
   td {
-    @apply flex-1 px-4 py-2 bg-gray-100;
+    @apply flex flex-col flex-1 gap-2 px-4 py-3 bg-white;
   }
 }
