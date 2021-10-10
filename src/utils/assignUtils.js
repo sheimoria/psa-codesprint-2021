@@ -1,7 +1,5 @@
 import * as getRequests from '../apis/getRequests'
-
-import axios from 'axios'
-import postRequests from '../apis/postRequests'
+import * as postRequests from '../apis/postRequests'
 
 //Intra Assignment
 
@@ -19,39 +17,39 @@ export const intraAssign = async () => {
   const allWorkerTasks = await getRequests.getWorkerTasks()
 
   //for each of deparmtment
-  departments.forEach((department, index) => {
-    const tasksInDepartment = allTasks.filter((task) => {
+  departments.forEach(department => {
+    const tasksInDepartment = allTasks.filter(task => 
       task.department_Id === department
-    })
+    )
+
     const sortedTasksByCriticality = tasksInDepartment.sort(function (a, b) {
       if (a.criticality < b.criticality) return -1
       if (a.criticality > b.criticality) return 1
       return 0
     })
-    const workersInDepartment = allWorkers.filter((worker) => {
-      worker.department_Id === department
-    })
-    sortedTasksByCriticality.forEach(async (task) => {
+    const workersInDepartment = allWorkers.filter(worker => 
+       worker.department_Id === department
+    )
+    const addedWorkers = []
+    sortedTasksByCriticality.forEach(async(task) => {
       const eligibleWorkers = workersInDepartment.filter(
         (worker) => worker.skill_Id === task.skillRequired
       )
       let count = 0
-      while (task.currentManpower !== task.manpowerRequired) {
-        const currentWorker = eligibleWorker[count]
-        if (
-          !allWorkerTasks.some(
-            (workerTask) => workerTask.worker_Id === currentWorker.worker_Id
-          )
-        ) {
-          await postRequests.addWorkerTaskPair(
-            currentWorker.worker_Id,
-            task.task_Id
-          )
-          const task = await getRequests.getTask(task.task_Id)
-          const newManpowerCount = task.currentManpower + 1
-          await postRequests.updateTask(task.task_Id, newManpowerCount)
+      while (task.currentManpower !== task.manpowerRequired && count < eligibleWorkers.length) {
+        const currentWorker = eligibleWorkers[count]
+        console.log(addedWorkers)
+        console.log(currentWorker.worker_Id)
+        if ( !addedWorkers.includes(currentWorker.worker_Id) ) {
+          addedWorkers.push(currentWorker.worker_Id)
+          await postRequests.addWorkerTaskPair(currentWorker.worker_Id, task.task_Id)
+          const row = await getRequests.getTask(task.task_Id)
+          const newManpowerCount = parseInt(row[0].currentManpower) + 1
+          await postRequests.updateTask(row[0].task_Id, newManpowerCount)
+          task.currentManpower += 1
+          count+=1
         }
-      }
+      } 
     })
   })
   //filter the tasks by department - e.g. list of 3 tasks in department A
@@ -69,3 +67,4 @@ export const intraAssign = async () => {
   //POST request to Worker-Task Table
   //PUT manpower of task
 }
+
