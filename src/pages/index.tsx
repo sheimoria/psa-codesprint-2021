@@ -1,10 +1,9 @@
 import * as deleteRequests from '../apis/deleteRequests'
-import * as randomGenerators from '../randomGenerators'
 import * as postRequests from '../apis/postRequests'
-import { useState } from "react"
-
 
 import Head from 'next/head'
+import { intraAssign } from '../utils/assignUtils'
+import { useState } from 'react'
 
 const Home = () => {
   const postWorkers = async () => {
@@ -28,8 +27,13 @@ const Home = () => {
             Number of unassigned workers
           </label>
           <div className="flex items-center gap-4">
-            <input name="numOfUnassignedWorkers" value={workerValue} onChange={e => setWorkerValue(e.target.value)}/>
+            <input
+              name="numOfUnassignedWorkers"
+              value={workerValue}
+              onChange={(e) => setWorkerValue(e.target.value)}
+            />
             <button onClick={postWorkers}>Assign Workers</button>
+            <button onClick={intraAssign}>Intra Assign Workers</button>
           </div>
         </div>
         <section className="flex gap-6">
@@ -98,5 +102,3 @@ const Home = () => {
 }
 
 export default Home
-
-
