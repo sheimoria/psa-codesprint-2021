@@ -25,6 +25,6 @@
     @apply flex-1 px-4 py-2 font-medium text-left text-white bg-indigo-600;
   }
   td {
-    @apply flex flex-col flex-1 gap-2 px-4 py-3 bg-white;
+    @apply flex flex-col justify-center flex-1 gap-2 px-4 py-3 bg-white;
   }
 }

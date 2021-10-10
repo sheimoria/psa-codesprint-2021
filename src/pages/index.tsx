@@ -65,7 +65,8 @@ const Home = () => {
           )
           .map((worker) => worker.name)
         const selectedManpowerRequired = `${task.currentManpower}/${task.manpowerRequired}`
-        const backLog = task.currentManpower < task.manpowerRequired ? "True" : "False"
+        const backLog =
+          task.currentManpower < task.manpowerRequired ? 'True' : 'False'
         const criticality = task.criticality
         object['equipment'] = selectedEquipment
         object['workers'] = selectedWorkers
@@ -78,16 +79,45 @@ const Home = () => {
   }
   const points = [0, 1, 2, 3]
   const getBackLogForDepartment = (department_Id) => {
-    return tasks.filter(task => task.department_Id === department_Id && (task.currentManpower < task.manpowerRequired)).reduce((cur, acc) => {
-      console.log(cur + points[acc.criticality] )
-      return cur + points[acc.criticality] 
-    }, 0) / tasks.filter(task => task.department_Id === department_Id).reduce((cur, acc) => {
-      console.log(cur + points[acc.criticality] )
-      return cur + points[acc.criticality] 
-    }, 0) * 100
+    return (
+      (tasks
+        .filter(
+          (task) =>
+            task.department_Id === department_Id &&
+            task.currentManpower < task.manpowerRequired
+        )
+        .reduce((cur, acc) => {
+          console.log(cur + points[acc.criticality])
+          return cur + points[acc.criticality]
+        }, 0) /
+        tasks
+          .filter((task) => task.department_Id === department_Id)
+          .reduce((cur, acc) => {
+            console.log(cur + points[acc.criticality])
+            return cur + points[acc.criticality]
+          }, 0)) *
+      100
+    )
   }
 
-  const criticalityEnum = ["","Low", "Med", "High"]
+  const criticalityEnum = [
+    '',
+    <td key={1}>
+      <span className="px-3 py-1 text-sm font-medium text-indigo-600 bg-indigo-100 rounded place-self-start">
+        Low
+      </span>
+    </td>,
+    <td key={2}>
+      <span className="px-3 py-1 text-sm font-medium text-indigo-700 bg-indigo-200 rounded place-self-start">
+        Medium
+      </span>
+    </td>,
+    <td key={3}>
+      <span className="px-3 py-1 text-sm font-medium text-indigo-800 bg-indigo-300 rounded place-self-start">
+        High
+      </span>
+    </td>
+  ]
 
   return (
     <>
@@ -134,13 +164,21 @@ const Home = () => {
                       ))}
                     </td>
                     <td>{departmentTask.manpower}</td>
-                    <td>{departmentTask.backlog}</td>
-                    <td>{criticalityEnum[departmentTask.criticality]}</td>
+                    <td
+                      className={
+                        departmentTask.backlog == 'True'
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }
+                    >
+                      {departmentTask.backlog}
+                    </td>
+                    {criticalityEnum[departmentTask.criticality]}
                   </tr>
                 ))}
               </table>
               <div className="px-4 py-2 font-medium text-indigo-600 bg-indigo-100 rounded">
-                Backlog:{`${getBackLogForDepartment(department)}`} %
+                Backlog: {Math.round(getBackLogForDepartment(department))}%
               </div>
             </div>
           ))}
