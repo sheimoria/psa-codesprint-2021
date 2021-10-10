@@ -50,7 +50,7 @@ export const generateTasks = () => {
         tasksCopy[index] = {
             ...task,
             manpowerRequired: generateManpowerRequired(),
-            isBackLog: generateIsBackLog() ,
+            isBackLog: "False",
             skillRequired: generateSkillId(),
             criticality: generateCriticality()
         }

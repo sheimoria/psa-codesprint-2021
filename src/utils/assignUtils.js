@@ -50,23 +50,25 @@ export const intraAssign = async () => {
         (worker) => worker.skill_Id === task.skillRequired
       )
       let count = 0
+      console.log(task)
       while (
-        task.currentManpower !== task.manpowerRequired &&
+        parseInt(task.currentManpower) < parseInt(task.manpowerRequired) &&
         count < eligibleWorkers.length
       ) {
+        console.log(task.currentManpower)
+        console.log(task.manpowerRequired)
         const currentWorker = eligibleWorkers[count]
-        console.log(addedWorkers)
-        console.log(currentWorker.worker_Id)
         if (!addedWorkers.includes(currentWorker.worker_Id)) {
           addedWorkers.push(currentWorker.worker_Id)
           await postRequests.addWorkerTaskPair(
             currentWorker.worker_Id,
-            task.task_Id
+            task.task_Id,
+            "key"
           )
           const row = await getRequests.getTask(task.task_Id)
           const newManpowerCount = parseInt(row[0].currentManpower) + 1
           await postRequests.updateTask(row[0].task_Id, newManpowerCount)
-          task.currentManpower += 1
+          task.currentManpower = newManpowerCount
         }
         count += 1
       }
@@ -87,14 +89,28 @@ export const interAssign = async () => {
   )
   const criticalities = ['1', '2', '3']
   for (let criticality of criticalities) {
-    const departments =
-      departmentsAccordingToHighestBacklogofCriticality(criticality)
+    
+    const departmentCount = [
+      { department_Id: "A", count: 0 },
+      { department_Id: "B", count: 0 },
+      { department_Id: "C", count: 0 }
+    ]
+  tasks.forEach((task) => {
+    if (task.criticality == criticality && (task.currentManpower < task.manpowerRequired)) {
+      departmentCount.find(
+        (department) => department.department_Id === task.department_Id
+      ).count += 1
+    }
+  })
+  departmentCount.sort((a, b) => a.count - b.count)
+  const departments = departmentCount.map((departmentCount) => departmentCount.department_Id)
+
     for (let department of departments) {
       const backlogs = tasks.filter(
         (task) =>
           task.department_Id === department &&
           task.criticality == criticality &&
-          task.isBackLog
+          task.currentManpower !== task.manpowerRequiredr
       )
       for (let backlog of backlogs) {
         if (commonPool.length > 0) {
@@ -102,7 +118,8 @@ export const interAssign = async () => {
             if (backlog.skillRequired == worker.skills_Id) {
               await postRequests.addWorkerTaskPair(
                 currentWorker.worker_Id,
-                backlog.task_Id
+                backlog.task_Id,
+                "key"
               )
               const row = await getRequests.getTask(backlog.task_Id)
               const newManpowerCount = parseInt(row[0].currentManpower) + 1
@@ -119,20 +136,7 @@ export const interAssign = async () => {
 }
 
 const departmentsAccordingToHighestBacklogofCriticality = (criticality) => {
-  const departmentCount = [
-    { department_Id: A, count: 0 },
-    { department_Id: B, count: 0 },
-    { department_Id: C, count: 0 }
-  ]
-  tasks.forEach((task) => {
-    if (task.criticality == criticality && !task.isBackLog) {
-      departmentCount.find(
-        (department) => department.department_Id === task.department_Id
-      ).count += 1
-    }
-  })
-  departmentCount.sort((a, b) => a.count - b.count)
-  return departmentCount.map((departmentCount) => departmentCount.department_Id)
+  
 }
 
 // Inter Assignment
