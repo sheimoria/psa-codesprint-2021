@@ -13,7 +13,7 @@ const Home = () => {
     await deleteRequests.deleteAllWorkers()
     await postRequests.generateWorkersAPI(workerValue)
     await postRequests.generateTasksAPI()
-    await deleteRequests.deleteAllWorkerTaskPairs(workerValue)
+    await deleteRequests.deleteAllWorkerTaskPairs()
   }
   const [workerValue, setWorkerValue] = useState<any>()
   const [workers, setWorkers] = useState([])
@@ -65,15 +65,29 @@ const Home = () => {
           )
           .map((worker) => worker.name)
         const selectedManpowerRequired = `${task.currentManpower}/${task.manpowerRequired}`
-        const backLog = `${task.isBackLog}`
+        const backLog = task.currentManpower < task.manpowerRequired ? "True" : "False"
+        const criticality = task.criticality
         object['equipment'] = selectedEquipment
         object['workers'] = selectedWorkers
         object['manpower'] = selectedManpowerRequired
         object['backlog'] = backLog
+        object['criticality'] = criticality
         table.push(object)
       })
     return table
   }
+  const points = [0, 1, 2, 3]
+  const getBackLogForDepartment = (department_Id) => {
+    return tasks.filter(task => task.department_Id === department_Id && (task.currentManpower < task.manpowerRequired)).reduce((cur, acc) => {
+      console.log(cur + points[acc.criticality] )
+      return cur + points[acc.criticality] 
+    }, 0) / tasks.filter(task => task.department_Id === department_Id).reduce((cur, acc) => {
+      console.log(cur + points[acc.criticality] )
+      return cur + points[acc.criticality] 
+    }, 0) * 100
+  }
+
+  const criticalityEnum = ["","Low", "Med", "High"]
 
   return (
     <>
@@ -109,6 +123,7 @@ const Home = () => {
                   <th>Workers</th>
                   <th>Required</th>
                   <th>Backlog</th>
+                  <th>Criticality</th>
                 </tr>
                 {departmentTasks(department).map((departmentTask) => (
                   <tr key={department}>
@@ -120,11 +135,12 @@ const Home = () => {
                     </td>
                     <td>{departmentTask.manpower}</td>
                     <td>{departmentTask.backlog}</td>
+                    <td>{criticalityEnum[departmentTask.criticality]}</td>
                   </tr>
                 ))}
               </table>
               <div className="px-4 py-2 font-medium text-indigo-600 bg-indigo-100 rounded">
-                Backlog: %
+                Backlog:{`${getBackLogForDepartment(department)}`} %
               </div>
             </div>
           ))}

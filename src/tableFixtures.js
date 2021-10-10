@@ -5,6 +5,7 @@ export const defaultTasks = [
         equipment_Id: '1',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -14,6 +15,7 @@ export const defaultTasks = [
         equipment_Id: '2',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -23,6 +25,7 @@ export const defaultTasks = [
         equipment_Id: '3',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -32,6 +35,7 @@ export const defaultTasks = [
         equipment_Id: '4',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -41,6 +45,7 @@ export const defaultTasks = [
         equipment_Id: '5',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -50,6 +55,7 @@ export const defaultTasks = [
         equipment_Id: '6',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -59,6 +65,7 @@ export const defaultTasks = [
         equipment_Id: '7',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -68,6 +75,7 @@ export const defaultTasks = [
         equipment_Id: '8',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     },
@@ -77,6 +85,7 @@ export const defaultTasks = [
         equipment_Id: '9',
         manpowerRequired: null,
         currentManpower: '0',
+        isBackLog: null,
         skillRequired: null,
         criticality: null
     }
