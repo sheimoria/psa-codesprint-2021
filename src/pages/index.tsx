@@ -11,7 +11,7 @@ const Home = () => {
     await deleteRequests.deleteAllWorkers()
     await postRequests.generateWorkersAPI(currentWorkerValue)
     await postRequests.generateTasksAPI()
-    // await postRequests.addWorkerTaskPair(1, 3)
+    // await postRequests.addWorkerTaskPair("1", "3")
     // await deleteRequests.deleteAllWorkerTaskPairs(1)
   }
 

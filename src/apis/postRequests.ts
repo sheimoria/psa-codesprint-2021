@@ -9,7 +9,7 @@ export const generateWorkersAPI = async (count) => {
       'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Workers',
       generatedWorkers
     )
-    console.log(JSON.stringify(response, null, 2))
+    // console.log(JSON.stringify(response, null, 2))
   } catch (err) {
     console.error(err)
   }
@@ -23,14 +23,14 @@ export const generateTasksAPI = async () => {
         `https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Tasks/${index}`,
         task
       )
-      console.log(JSON.stringify(response, null, 2))
+      // console.log(JSON.stringify(response, null, 2))
     } catch (err) {
       console.error(err)
     }
   })
 }
 
-export const addWorkerTaskPair = async (workerId, taskId) => {
+export const addWorkerTaskPair = async (workerId : string, taskId : string) => {
   const body = {
     worker_Id: workerId,
     task_Id: taskId
@@ -40,7 +40,7 @@ export const addWorkerTaskPair = async (workerId, taskId) => {
       'https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Worker-Task',
       body
     )
-    console.log(JSON.stringify(response, null, 2))
+    // console.log(JSON.stringify(response, null, 2))
   } catch (err) {
     console.error(err)
   }
@@ -49,7 +49,7 @@ export const addWorkerTaskPair = async (workerId, taskId) => {
 export const updateTask = async (task_Id: number, currentManpower: number) => {
   const response = await axios.patch(
     `https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Tasks/${
-      task_Id - 1
+      task_Id
     }`,
     { currentManpower: currentManpower }
   )
