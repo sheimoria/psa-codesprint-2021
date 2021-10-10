@@ -1,18 +1,17 @@
 import * as deleteRequests from '../apis/deleteRequests'
 import * as postRequests from '../apis/postRequests'
 
+import { interAssign, intraAssign } from '../utils/assignUtils'
+
 import Head from 'next/head'
-import { intraAssign } from '../utils/assignUtils'
 import { useState } from 'react'
 
 const Home = () => {
   const postWorkers = async () => {
-    const currentWorkerValue = workerValue
     await deleteRequests.deleteAllWorkers()
-    await postRequests.generateWorkersAPI(currentWorkerValue)
+    await postRequests.generateWorkersAPI(workerValue)
     await postRequests.generateTasksAPI()
-    // await postRequests.addWorkerTaskPair("1", "3")
-    // await deleteRequests.deleteAllWorkerTaskPairs(1)
+    await deleteRequests.deleteAllWorkerTaskPairs(workerValue)
   }
 
   const [workerValue, setWorkerValue] = useState<any>()
@@ -34,6 +33,7 @@ const Home = () => {
             />
             <button onClick={postWorkers}>Assign Workers</button>
             <button onClick={intraAssign}>Intra Assign Workers</button>
+            <button onClick={interAssign}>Inter Assign Workers</button>
           </div>
         </div>
         <section className="flex gap-6">
