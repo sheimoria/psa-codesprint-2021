@@ -18,6 +18,7 @@ export const generateWorkersAPI = async (count) => {
 export const generateTasksAPI = async () => {
   const generatedTasks = randomGenerators.generateTasks()
   generatedTasks.forEach(async (task, index) => {
+    console.log(task)
     try {
       const response = await axios.put(
         `https://sheet.best/api/sheets/4dfeb757-5527-4d0c-8134-88923d27e660/tabs/Tasks/${index}`,

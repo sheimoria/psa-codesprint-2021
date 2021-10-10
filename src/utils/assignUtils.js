@@ -94,7 +94,7 @@ export const interAssign = async () => {
         (task) =>
           task.department_Id === department &&
           task.criticality == criticality &&
-          task.isBackLog
+          task.currentManpower !== task.manpowerRequiredr
       )
       for (let backlog of backlogs) {
         if (commonPool.length > 0) {
@@ -125,7 +125,7 @@ const departmentsAccordingToHighestBacklogofCriticality = (criticality) => {
     { department_Id: C, count: 0 }
   ]
   tasks.forEach((task) => {
-    if (task.criticality == criticality && !task.isBackLog) {
+    if (task.criticality == criticality && (task.currentManpower < task.manpowerRequired)) {
       departmentCount.find(
         (department) => department.department_Id === task.department_Id
       ).count += 1
