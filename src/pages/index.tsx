@@ -68,11 +68,13 @@ const Home = () => {
         const backLog =
           task.currentManpower < task.manpowerRequired ? 'True' : 'False'
         const criticality = task.criticality
+        const skill = task.skillRequired
         object['equipment'] = selectedEquipment
         object['workers'] = selectedWorkers
         object['manpower'] = selectedManpowerRequired
         object['backlog'] = backLog
         object['criticality'] = criticality
+        object['skill'] = skill
         table.push(object)
       })
     return table
@@ -150,14 +152,20 @@ const Home = () => {
               <table>
                 <tr>
                   <th>Equipment</th>
+                  <th>Skills Required</th>
                   <th>Workers</th>
-                  <th>Required</th>
+                  <th>Manpower Required</th>
                   <th>Backlog</th>
                   <th>Criticality</th>
                 </tr>
                 {departmentTasks(department).map((departmentTask) => (
                   <tr key={department}>
                     <td>{departmentTask.equipment[0]?.type}</td>
+                    <td>
+                      <span className="px-3 py-1 text-sm font-medium text-indigo-600 bg-indigo-100 rounded place-self-start">
+                        {departmentTask.skill}
+                      </span>
+                    </td>
                     <td>
                       {departmentTask.workers.map((worker, index) => (
                         <p key={index}>{worker}</p>
