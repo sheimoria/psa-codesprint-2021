@@ -1,11 +1,22 @@
 import * as deleteRequests from '../apis/deleteRequests'
 import * as randomGenerators from '../randomGenerators'
 import * as postRequests from '../apis/postRequests'
+import { useState } from "react"
 
 
 import Head from 'next/head'
 
 const Home = () => {
+  const postWorkers = async () => {
+    const currentWorkerValue = workerValue
+    await deleteRequests.deleteAllWorkers()
+    await postRequests.generateWorkersAPI(currentWorkerValue)
+    await postRequests.generateTasksAPI()
+    // await postRequests.addWorkerTaskPair(1, 3)
+    // await deleteRequests.deleteAllWorkerTaskPairs(1)
+  }
+
+  const [workerValue, setWorkerValue] = useState<any>()
   return (
     <>
       <Head>
@@ -17,7 +28,7 @@ const Home = () => {
             Number of unassigned workers
           </label>
           <div className="flex items-center gap-4">
-            <input name="numOfUnassignedWorkers" />
+            <input name="numOfUnassignedWorkers" value={workerValue} onChange={e => setWorkerValue(e.target.value)}/>
             <button onClick={postWorkers}>Assign Workers</button>
           </div>
         </div>
@@ -88,10 +99,4 @@ const Home = () => {
 
 export default Home
 
-const postWorkers = async () => {
-  // await postRequests.generateWorkersAPI(30)
-  await deleteRequests.deleteAllWorkers()
-  // await postRequests.generateTasksAPI()
-  // await postRequests.addWorkerTaskPair(1, 3)
-  // await deleteRequests.deleteAllWorkerTaskPairs(1)
-}
+
